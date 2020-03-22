@@ -1,24 +1,24 @@
 /*
-change: {
+The code based on codemirror-adapter.
+The following objects and TextOperation are mutually converted.
+
+change = {
   from: position
+  to: position | undefind
   text: string
   deleteLength: number
 }
-
-position: {line: number, ch: number}
-
-fullText: string[]
+position = {line: number, ch: number}
 */
 
-import TextOperation from "./text-operation";
+import TextOperation from './text-operation';
 
 export const toOperation = (change, fullText) => {
-  const textEndLength = sumLengths(fullText.split("\n"));
-  console.log(`textEndLength:${textEndLength}`);
+  const textEndLength = sumLengths(fullText.split('\n'));
   let operation = new TextOperation().retain(textEndLength);
 
   const indexFromPos = function(pos) {
-    const textArray = fullText.split("\n");
+    const textArray = fullText.split('\n');
     const line = pos.line;
     let count = 0;
     for (let i = 0; i < line; i++) {
@@ -41,18 +41,15 @@ export const toOperation = (change, fullText) => {
 
   const fromIndex = indexFromPos(change.from);
   const restLength =
-    textEndLength - fromIndex - sumLengths(change.text.split("\n"));
+    textEndLength - fromIndex - sumLengths(change.text.split('\n'));
 
-  console.log(`fromIndex:${fromIndex}`);
-  console.log(`restLength:${restLength}`);
   operation = new TextOperation()
     .retain(fromIndex)
-    ["delete"](change.deleteLength)
+    ['delete'](change.deleteLength)
     .insert(change.text)
     .retain(restLength)
     .compose(operation);
 
-  console.log(`ope:${operation}`);
   return operation;
 };
 
@@ -61,7 +58,7 @@ export const fromOperation = function(operation, fullText) {
     let line = 0;
     let ch = 0;
     let sum = 0;
-    const textArray = fullText.split("\n");
+    const textArray = fullText.split('\n');
     for (let i = 0; i < textArray.length; i++) {
       const lineLength = textArray[i].length;
       if (sum + lineLength >= index) {
@@ -94,8 +91,6 @@ export const fromOperation = function(operation, fullText) {
       const first = fullText.slice(0, index);
       const last = fullText.slice(index);
       fullText = first + op + last;
-      console.log("insertedText");
-      console.log(fullText + "\n");
     } else if (TextOperation.isDelete(op)) {
       const from = posFromIndex(index);
       const to = posFromIndex(index - op);
@@ -109,14 +104,12 @@ export const fromOperation = function(operation, fullText) {
           ch: to.ch
         },
         deleteLength: -op,
-        text: ""
+        text: ''
       });
 
       const first = fullText.slice(0, index);
       const last = fullText.slice(index - op);
       fullText = first + last;
-      console.log("deletedText");
-      console.log(fullText + "\n");
     }
   }
 
