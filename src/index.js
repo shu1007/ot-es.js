@@ -2,6 +2,7 @@ export TextOperation from 'common/text-operation';
 export SimpleTextOperation from 'common/simple-text-operation';
 export WrappedOperation from 'common/wrapped-operation';
 export Selection from 'common/selection';
+export { toOperation, fromOperation } from 'common/simple-converter';
 
 export AjaxAdapter from 'browser/ajax-adapter';
 export Client from 'browser/client';
@@ -17,6 +18,7 @@ import TextOperation from 'common/text-operation';
 import SimpleTextOperation from 'common/simple-text-operation';
 import WrappedOperation from 'common/wrapped-operation';
 import Selection from 'common/selection';
+import { toOperation, fromOperation } from 'common/simple-converter';
 
 import AjaxAdapter from 'browser/ajax-adapter';
 import Client from 'browser/client';
@@ -33,6 +35,8 @@ export default {
   SimpleTextOperation,
   WrappedOperation,
   Selection,
+  toOperation,
+  fromOperation,
   AjaxAdapter,
   Client,
   CodeMirrorAdapter,
@@ -41,4 +45,4 @@ export default {
   UndoManager,
   Server,
   EditorSocketIOServer
-}
+};
